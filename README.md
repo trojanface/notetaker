@@ -17,6 +17,11 @@ Your thoughts are important, but you shouldn't have to remember them. Enter My N
 3. Open browser and visit localhost:3000
 4. Follow the onscreen prompts.
 
+![A screenshot of Note Taker](screenshot.png)
+
+## Link to Deployed App
+https://mybootcampnotetaker.herokuapp.com/notes
+
 ## License
 Public Domain
 
