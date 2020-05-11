@@ -27,20 +27,11 @@ app.get("/api/notes", function (req, res) {
     if (err) {
       throw err;
     } else {
-      notesArray = JSON.parse(data);
+      notesArray = JSON.parse(data); //store information from db.json file as an array of objects.
       for (let index in notesArray) {
-        notesArray[index].id = index;
+        notesArray[index].id = index;//Uses the position in the array as a unique id for the objects.
       }
-      fs.writeFile(
-        path.join(__dirname, "/db/db.json"),
-        JSON.stringify(notesArray),
-        "utf8",
-        function (err) {
-          if (err) {
-            throw err;
-          }
-        }
-      );
+      updateNotes(notesArray);
       return res.json(notesArray);
     }
   });
@@ -51,23 +42,13 @@ app.post("/api/notes", function (req, res) {
     err,
     data
   ) {
-    //turn this into a function and then call it from within a async await
     if (err) {
       throw err;
     } else {
-      notesArray = JSON.parse(data);
+      notesArray = JSON.parse(data);//store information from db.json file as an array of objects.
       let newNote = req.body;
-      notesArray.push(newNote);
-      fs.writeFile(
-        path.join(__dirname, "/db/db.json"),
-        JSON.stringify(notesArray),
-        "utf8",
-        function (err) {
-          if (err) {
-            throw err;
-          }
-        }
-      );
+      notesArray.push(newNote);//adds the note to the array.
+      updateNotes(notesArray);
       return res.json(notesArray);
     }
   });
@@ -81,18 +62,9 @@ app.delete("/api/notes:id", function (req, res) {
     if (err) {
       throw err;
     } else {
-      notesArray = JSON.parse(data);
-      notesArray.splice(parseInt(req.params.id.substr(1)), 1);
-      fs.writeFile(
-        path.join(__dirname, "/db/db.json"),
-        JSON.stringify(notesArray),
-        "utf8",
-        function (err) {
-          if (err) {
-            throw err;
-          }
-        }
-      );
+      notesArray = JSON.parse(data);//store information from db.json file as an array of objects.
+      notesArray.splice(parseInt(req.params.id.substr(1)), 1);//delete the colon at the front of the id and then delete that object from the array.
+      updateNotes(notesArray);
       return res.json(notesArray);
     }
   });
@@ -101,4 +73,19 @@ app.delete("/api/notes:id", function (req, res) {
 //Start server
 app.listen(PORT, function () {
   console.log("Listening on port " + PORT);
+ 
 });
+
+
+function updateNotes (notesArray) {
+  fs.writeFile(
+    path.join(__dirname, "/db/db.json"),//writes the changes to the file.
+    JSON.stringify(notesArray),
+    "utf8",
+    function (err) {
+      if (err) {
+        throw err;
+      }
+    }
+  );
+}
